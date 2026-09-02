@@ -1,0 +1,18 @@
+Anytime search with a time cutoff
+Only commit a depth's result once that entire depth has finished searching.
+
+def anytime_search(state, time_budget_sec, heuristic_num, weights, max_depth=30):
+    deadline = time.time() + time_budget_sec
+    best_val, best_move, completed_depth = None, None, 0
+    d = 1
+    while d <= max_depth:
+        try:
+            val, move = h1_max_value(state, d, -math.inf, math.inf, heuristic_num, weights, deadline)
+            best_val, best_move, completed_depth = val, move, d   # commit only on full completion
+            d += 1
+        except TimeUp:
+            break
+    return best_val, best_move, completed_depth
+
+h1_max_value/h1_min_value raise TimeUp the instant time.time() > deadline, 
+so a half-finished depth never corrupts the previous depth's answer.

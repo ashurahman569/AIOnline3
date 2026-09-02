@@ -1,0 +1,16 @@
+Killer-move ordering
+Remember the move that caused the last beta-cutoff at each depth; try it first next time.
+
+
+m1_killers = {}  # depth -> pit that most recently caused a cutoff
+
+def m1_order(moves, depth):
+    killer = m1_killers.get(depth)
+    if killer in moves:
+        moves = [killer] + [m for m in moves if m != killer]
+    return moves
+
+# inside the search loop, on a cutoff:
+if alpha >= beta:
+    m1_killers[depth] = m
+    break

@@ -1,0 +1,16 @@
+Stop expanding once a global counter crosses a limit; return the best guess so far.
+
+
+def e2_max_value(state, depth, alpha, beta, heuristic_num, weights, budget):
+    global e2_nodes
+    e2_nodes += 1
+    if e2_nodes >= budget or depth == 0 or state.is_terminal():
+        return state.evaluate(PLAYER1, heuristic_num, weights), None
+    ...
+    for m in moves:
+        if e2_nodes >= budget:
+            break
+        ...
+
+
+Result: with budget=500, search stops exactly at 500 nodes and still returns a usable move.

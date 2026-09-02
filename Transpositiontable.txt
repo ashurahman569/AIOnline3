@@ -1,0 +1,19 @@
+Transposition table
+Cache (board, depth, mover) → value so identical states aren't re-searched.
+
+def state_key(state, depth):
+    return (tuple(state.side[0]), tuple(state.side[1]),
+            state.store[0], state.store[1], state.to_move, depth)
+
+def h2_max_value(state, depth, alpha, beta, heuristic_num, weights):
+    key = state_key(state, depth)
+    if key in h2_table:
+        return h2_table[key], None
+    ...
+    h2_table[key] = v   # populate right before returning
+    return v, best_move
+
+Note from the test run: at depth 6 from the opening position, the cache barely helped 
+(1707 nodes either way) — transpositions are rare that early since sowing patterns diverge fast.
+It becomes much more valuable searching mid-game positions or at greater depth, 
+where more move orders funnel into the same board.

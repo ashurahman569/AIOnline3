@@ -1,0 +1,13 @@
+Furthest-bin tie-break
+Among moves tied for the best value, keep the one farthest from the mover's store.
+
+def distance_from_store(player, pit):
+    return 5 - pit
+
+better = (val > best_val) if player == PLAYER1 else (val < best_val)
+if better:
+    best_val, tied_moves = val, [m]
+elif val == best_val:
+    tied_moves.append(m)
+
+chosen = max(tied_moves, key=lambda p: distance_from_store(player, p))

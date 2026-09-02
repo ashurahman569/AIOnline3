@@ -1,0 +1,25 @@
+Opponent-near-win penalty
+
+Subtract 15 from the heuristic whenever the opponent's storage holds ≥40% 
+of all 48 stones on the board (the total is conserved all game, so the threshold 
+is a fixed number: 0.4 × 48 = 19.2).
+
+TOTAL_STONES = 48
+NEAR_WIN_FRACTION = 0.40
+PENALTY = 15
+
+def heuristic_with_penalty(state, player, heuristic_num=4, weights=(1, 1, 1, 1)):
+    opp = 1 - player
+    H_old = state.evaluate(player, heuristic_num, weights)
+    opp_storage = state.store[opp]
+    near_winning = opp_storage >= NEAR_WIN_FRACTION * TOTAL_STONES
+    P = PENALTY if near_winning else 0
+    return H_old - P, opp_storage, near_winning, P
+
+
+# required printout, computed once for the root state before searching:
+_, opp_storage, near_winning, P = heuristic_with_penalty(state, PLAYER1)
+print(f"Opponent Storage: {opp_storage}")
+print(f"Opponent Near Winning: {'Yes' if near_winning else 'No'}")
+print(f"Penalty Applied: {P}")
+

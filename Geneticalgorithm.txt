@@ -1,0 +1,21 @@
+Weight-tuning via self-play
+A minimal genetic algorithm: random weight populations play round-robin, survivors mutate.
+
+def mutate(weights, rate=0.5):
+    return tuple(max(0, w + random.uniform(-rate, rate)) for w in weights)
+
+def evolve_weights(generations, population, depth):
+    pop = [tuple(random.uniform(0.5, 1.5) for _ in range(4)) for _ in range(population)]
+    for gen in range(generations):
+        scores = {i: 0 for i in range(population)}
+        for i in range(population):
+            for j in range(population):
+                if i == j: continue
+                s1, s2 = play_game(pop[i], pop[j], depth=depth)
+                if s1 > s2: scores[i] += 1
+                elif s2 > s1: scores[j] += 1
+        ranked = sorted(range(population), key=lambda i: scores[i], reverse=True)
+        survivors = [pop[i] for i in ranked[:population // 2]]
+        pop = survivors + [mutate(random.choice(survivors)) for _ in range(population - len(survivors))]
+    return pop[0]
+

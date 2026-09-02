@@ -1,0 +1,12 @@
+Iterative deepening + root move reuse
+Search depth 1, 2, 3... and seed each new depth's root ordering with the previous depth's best move.
+
+def iterative_deepening(state, max_depth, heuristic_num, weights):
+    best_move = None
+    for d in range(1, max_depth + 1):
+        m3_nodes = 0
+        val, best_move = m3_max_value(state, d, -math.inf, math.inf,
+                                       heuristic_num, weights, root_order=best_move)
+        print(f"Depth {d}: nodes={m3_nodes}, move={best_move+1}, val={val}")
+    return best_move
+

@@ -1,0 +1,9 @@
+Stones-close-to-storage heuristic
+Weight stones by pit distance from the store (pit 5 = weight 1, pit 0 = weight 6).
+
+def heuristic_close_to_store(state, player, W1=1, W2=1, W5=1):
+    opp = 1 - player
+    base = state.heuristic2(player, W1, W2)
+    close_me  = sum((6 - i) * state.side[player][i] for i in range(6))
+    close_opp = sum((6 - i) * state.side[opp][i]    for i in range(6))
+    return base + W5 * (close_me - close_opp)

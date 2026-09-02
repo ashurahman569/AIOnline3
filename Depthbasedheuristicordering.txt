@@ -1,0 +1,23 @@
+Depth-based heuristic weighting
+
+Use different weights depending on how many plies remain in this search: 
+H = 2(Sm−So) + (Bm−Bo) when remaining depth > 1, and H = 5(Sm−So) + 3(Bm−Bo) right at the horizon (remaining depth = 1).
+
+def heuristic_depth_based(state, player, remaining_depth):
+    opp = 1 - player
+    Sm, So = state.store[player], state.store[opp]
+    Bm, Bo = sum(state.side[player]), sum(state.side[opp])
+    if remaining_depth > 1:
+        return 2 * (Sm - So) + 1 * (Bm - Bo)
+    else:
+        return 5 * (Sm - So) + 3 * (Bm - Bo)
+
+# max_value / min_value call this instead of state.evaluate(...),
+# passing the current `depth` parameter as remaining_depth:
+if depth == 0 or state.is_terminal():
+    return heuristic_depth_based(state, PLAYER1, depth), None
+
+
+Result: depth-6 search returns move 3, evaluation 2 — the depth parameter 
+you already thread through recursion doubles as "remaining depth,
+so no new plumbing was needed beyond swapping the evaluate call.
